@@ -12,6 +12,11 @@ import { createAuthRouter } from './routes/auth.routes.js';
 export const createApp = (env: AppEnv) => {
   const app = express();
 
+  if (env.isProduction) {
+    // Render sits behind a reverse proxy, so Express should trust the first hop.
+    app.set('trust proxy', 1);
+  }
+
   app.use(
     cors({
       origin: env.clientUrl,
@@ -43,4 +48,3 @@ export const createApp = (env: AppEnv) => {
 
   return app;
 };
-
